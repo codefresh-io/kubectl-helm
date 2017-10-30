@@ -1,0 +1,12 @@
+version: '1.0'
+
+steps:
+  build_step:
+    title: "Building kubectl-helm"
+    type: build
+    image_name: codefresh/kube-helm
+  push_to_registry:
+    title: "Pushing image to registry"
+    type: push
+    candidate: ${{build_step}}
+    tag: ${{CF_BRANCH}}
