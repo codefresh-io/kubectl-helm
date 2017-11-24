@@ -3,7 +3,7 @@ FROM alpine:3.6
 
 ARG KUBE_VERSION="v1.8.1"
 
-ARG HELM_VERSION="v2.7.0"
+ARG HELM_VERSION="v2.6.1"
 
 ENV FILENAME="helm-${HELM_VERSION}-linux-amd64.tar.gz"
 
