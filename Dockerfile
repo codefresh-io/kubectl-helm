@@ -10,6 +10,7 @@ ENV FILENAME="helm-${HELM_VERSION}-linux-amd64.tar.gz"
 RUN apk add --update ca-certificates \
     && apk add --update -t deps curl \
     && apk add bash \
+    && apk add jq \
     && curl -L https://storage.googleapis.com/kubernetes-release/release/${KUBE_VERSION}/bin/linux/amd64/kubectl -o /usr/local/bin/kubectl \
     && chmod +x /usr/local/bin/kubectl \
     && curl -L http://storage.googleapis.com/kubernetes-helm/${FILENAME} -o /tmp/${FILENAME} \
