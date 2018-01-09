@@ -7,11 +7,14 @@ ARG HELM_VERSION="v2.7.0"
 
 ENV FILENAME="helm-${HELM_VERSION}-linux-amd64.tar.gz"
 
-RUN apk update \
-    && apk add --update ca-certificates \
+RUN apk add --update ca-certificates && update-ca-certificates \
     && apk add --update -t deps curl \
     && apk add bash \
     && apk add jq \
+    && apk add python \
+    && apk add make \
+    && apk add git \
+    && apk add openssl \
     && curl -L https://storage.googleapis.com/kubernetes-release/release/${KUBE_VERSION}/bin/linux/amd64/kubectl -o /usr/local/bin/kubectl \
     && chmod +x /usr/local/bin/kubectl \
     && curl -L http://storage.googleapis.com/kubernetes-helm/${FILENAME} -o /tmp/${FILENAME} \
@@ -21,6 +24,10 @@ RUN apk update \
     && apk del --purge deps \
     && rm /var/cache/apk/* \
     && rm -rf /tmp/*
+
+RUN helm init --client-only
+
+RUN helm plugin install https://github.com/hypnoglow/helm-s3.git
 
 WORKDIR /config
 
