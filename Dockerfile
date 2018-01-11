@@ -26,9 +26,6 @@ RUN apk add --update ca-certificates && update-ca-certificates \
     && rm -rf /tmp/*
 
 RUN helm init --client-only
-
-RUN helm plugin install https://github.com/hypnoglow/helm-s3.git
-
 WORKDIR /config
 
 CMD bash
