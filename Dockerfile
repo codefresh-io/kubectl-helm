@@ -23,7 +23,6 @@ RUN apk add --update ca-certificates && update-ca-certificates \
     && tar -zxvf /tmp/${FILENAME} -C /tmp \
     && mv /tmp/linux-amd64/helm /bin/helm \
     # Cleanup uncessary files
-    && apk del --purge deps \
     && rm /var/cache/apk/* \
     && rm -rf /tmp/*
 
