@@ -8,7 +8,7 @@ ARG HELM_VERSION="v2.7.0"
 ENV FILENAME="helm-${HELM_VERSION}-linux-amd64.tar.gz"
 
 RUN apk add --update ca-certificates && update-ca-certificates \
-    && apk add --update -t deps curl \
+    && apk add --update curl \
     && apk add bash \
     && apk add jq \
     && apk add python \
