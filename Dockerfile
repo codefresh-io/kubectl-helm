@@ -15,6 +15,8 @@ RUN apk add --update ca-certificates && update-ca-certificates \
     && apk add make \
     && apk add git \
     && apk add openssl \
+    && apk add py-pip \
+    && pip install yq \
     && curl -L https://storage.googleapis.com/kubernetes-release/release/${KUBE_VERSION}/bin/linux/amd64/kubectl -o /usr/local/bin/kubectl \
     && chmod +x /usr/local/bin/kubectl \
     && curl -L http://storage.googleapis.com/kubernetes-helm/${FILENAME} -o /tmp/${FILENAME} \
