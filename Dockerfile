@@ -5,7 +5,9 @@ ARG KUBE_VERSION="v1.14.3"
 
 ARG HELM_VERSION="v2.12.3"
 
-ENV FILENAME="helm-${HELM_VERSION}-linux-amd64.tar.gz"
+RUN echo "HELM_VERSION is set to: ${HELM_VERSION}"
+
+ENV FILENAME="helm-v${HELM_VERSION}-linux-amd64.tar.gz"
 
 RUN apk add --update ca-certificates && update-ca-certificates \
     && apk add --update curl \
@@ -26,7 +28,7 @@ RUN apk add --update ca-certificates && update-ca-certificates \
     && rm /var/cache/apk/* \
     && rm -rf /tmp/*
 
-RUN if [[ "${HELM_VERSION}" == 2* ]]; then helm init --client-only; echo "using helm3, no need to initialize helm"; fi
+RUN bash -c 'if [[ "${HELM_VERSION}" == 2* ]]; then helm init --client-only; else echo "using helm3, no need to initialize helm"; fi'
 WORKDIR /config
 
 CMD bash
