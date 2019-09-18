@@ -1,11 +1,13 @@
 FROM alpine:3.6
 
 
-ARG KUBE_VERSION="v1.8.1"
+ARG KUBE_VERSION="v1.14.3"
 
-ARG HELM_VERSION="v2.7.0"
+ARG HELM_VERSION="v2.12.3"
 
-ENV FILENAME="helm-${HELM_VERSION}-linux-amd64.tar.gz"
+RUN echo "HELM_VERSION is set to: ${HELM_VERSION}"
+
+ENV FILENAME="helm-v${HELM_VERSION}-linux-amd64.tar.gz"
 
 RUN apk add --update ca-certificates && update-ca-certificates \
     && apk add --update curl \
@@ -19,14 +21,14 @@ RUN apk add --update ca-certificates && update-ca-certificates \
     && pip install yq \
     && curl -L https://storage.googleapis.com/kubernetes-release/release/${KUBE_VERSION}/bin/linux/amd64/kubectl -o /usr/local/bin/kubectl \
     && chmod +x /usr/local/bin/kubectl \
-    && curl -L http://storage.googleapis.com/kubernetes-helm/${FILENAME} -o /tmp/${FILENAME} \
+    && curl -L https://get.helm.sh/${FILENAME} -o /tmp/${FILENAME} \
     && tar -zxvf /tmp/${FILENAME} -C /tmp \
     && mv /tmp/linux-amd64/helm /bin/helm \
     # Cleanup uncessary files
     && rm /var/cache/apk/* \
     && rm -rf /tmp/*
 
-RUN helm init --client-only
+RUN bash -c 'if [[ "${HELM_VERSION}" == 2* ]]; then helm init --client-only; else echo "using helm3, no need to initialize helm"; fi'
 WORKDIR /config
 
 CMD bash
