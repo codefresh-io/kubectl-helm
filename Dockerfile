@@ -1,4 +1,4 @@
-FROM alpine:3.6
+FROM alpine:3.15
 
 
 ARG KUBE_VERSION="v1.23.3"
