@@ -1,4 +1,4 @@
-FROM alpine:3.6
+FROM alpine:3.15
 
 
 ARG KUBE_VERSION="v1.23.3"
@@ -13,11 +13,11 @@ RUN apk add --update ca-certificates && update-ca-certificates \
     && apk add --update curl \
     && apk add bash \
     && apk add jq \
-    && apk add python \
+    && apk add python3 \
     && apk add make \
     && apk add git \
     && apk add openssl \
-    && apk add py-pip \
+    && apk add py3-pip \
     && pip install yq \
     && curl -L https://storage.googleapis.com/kubernetes-release/release/${KUBE_VERSION}/bin/linux/amd64/kubectl -o /usr/local/bin/kubectl \
     && chmod +x /usr/local/bin/kubectl \
