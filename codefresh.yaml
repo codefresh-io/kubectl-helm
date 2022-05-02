@@ -1,12 +1,101 @@
 version: '1.0'
-
 steps:
-  build_step:
-    title: "Building kubectl-helm"
+
+  define_the_versions_list:
+    image: alpine
+    commands:
+      - |- 
+        cat <<EOF > helmVersionsList 
+        3.0.0
+        3.0.1
+        3.0.2
+        3.0.3
+        3.1.0
+        3.1.1
+        3.1.2
+        3.1.3
+        3.2.0
+        3.2.1
+        3.2.2
+        3.2.3
+        3.2.4
+        3.3.1
+        3.4.1
+        3.5.2
+        3.6.0
+        3.6.1
+        3.6.2
+        3.7.0
+        3.7.1
+        3.7.2
+        3.8.0
+    when:
+      condition:
+        all:
+          notRecursivelyInvoked: 'includes("${{HELM_VERSION}}", "${{") == true'
+          
+  run-cli-loop:
+    image: codefresh/cli
+    commands:
+      - for VAR in $(cat helmVersionsList); do codefresh wait $(codefresh run ${{CF_PIPELINE_NAME}} -d --branch ${{CF_BRANCH}} --variable HELM_VERSION=${VAR} --trigger ${{CF_PIPELINE_TRIGGER_ID}} --context github) & done
+      - for j in $(jobs -p); do wait $j || (echo "Failed to build one of the images" && ! break); done
+    when:
+      condition:
+        all:
+          notRecursivelyInvoked: 'includes("${{HELM_VERSION}}", "${{") == true'
+          
+  clone:
+    type: git-clone
+    arguments:
+      repo: '${{CF_REPO_OWNER}}/${{CF_REPO_NAME}}'
+      git: github
+      revision: '${{CF_REVISION}}'
+      when:
+        condition:
+          all:
+            recursivelyInvoked: 'includes("${{HELM_VERSION}}", "${{") == false'
+  
+  BuildingDockerImage:
+    title: Building Docker Image
     type: build
     image_name: codefresh/kube-helm
-  push_to_registry:
-    title: "Pushing image to registry"
+    working_directory: '${{clone}}'
+    tag: '${{HELM_VERSION}}'
+    build_arguments:
+        - 'HELM_VERSION=${{HELM_VERSION}}'
+    when:
+      condition:
+        all:
+          recursivelyInvoked: 'includes("${{HELM_VERSION}}", "${{") == false'
+   
+  push_to_registry_with_branch:	
+    title: Pushing image to registry
     type: push
-    candidate: ${{build_step}}
-    tag: ${{CF_BRANCH}}
+    candidate: ${{BuildingDockerImage}}
+    tag: ${{HELM_VERSION}}
+    when:
+      condition:
+        all:
+          recursivelyInvoked: 'includes("${{HELM_VERSION}}", "${{") == false'
+          masterBranch: 'match("${{CF_BRANCH}}", "^master", true) == true'
+    scale:
+      push_to_dockerhub_with_branch:
+        registry: dockerhub
+      push_to_quay_with_branch:
+        registry: quay
+
+  push_latest:
+    type: push
+    registry: dockerhub
+    tag: latest
+    candidate: ${{BuildingDockerImage}}
+    when:
+      condition:
+        all:
+          latestHelmVersion: "'${{HELM_VERSION}}' == '${{LATEST_VERSION}}'"
+          masterBranch: "'${{CF_BRANCH}}' == 'master'"
+    scale:
+      push_to_dockerhub_latest:
+        registry: dockerhub
+      push_to_quay_latest:
+        registry: quay
