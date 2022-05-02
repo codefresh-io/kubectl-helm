@@ -82,7 +82,7 @@ steps:
       push_to_dockerhub_with_branch:
         registry: dockerhub
       push_to_quay_with_branch:
-        registry: quay
+        registry: quay-codefresh
 
   push_latest:
     type: push
@@ -98,4 +98,4 @@ steps:
       push_to_dockerhub_latest:
         registry: dockerhub
       push_to_quay_latest:
-        registry: quay
+        registry: quay-codefresh
