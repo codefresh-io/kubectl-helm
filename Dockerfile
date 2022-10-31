@@ -1,4 +1,4 @@
-FROM alpine:3.15.4
+FROM debian
 
 
 ARG KUBE_VERSION="v1.23.3"
