@@ -1,4 +1,4 @@
-FROM debian
+FROM debian:bullseye-slim
 
 
 ARG KUBE_VERSION="v1.23.3"
@@ -9,15 +9,11 @@ RUN echo "HELM_VERSION is set to: ${HELM_VERSION}"
 
 ENV FILENAME="helm-v${HELM_VERSION}-linux-amd64.tar.gz"
 
-RUN apk add --update ca-certificates && update-ca-certificates \
-    && apk add --update curl \
-    && apk add bash \
-    && apk add jq \
-    && apk add python3 \
-    && apk add make \
-    && apk add git \
-    && apk add openssl \
-    && apk add py3-pip \
+RUN apt update && apt upgrade
+RUN apt-get install ca-certificates -y
+RUN update-ca-certificates
+
+RUN apt-get install curl bash jq python3 make git openssl python3-pip -y \
     && pip install yq \
     && curl -L https://storage.googleapis.com/kubernetes-release/release/${KUBE_VERSION}/bin/linux/amd64/kubectl -o /usr/local/bin/kubectl \
     && chmod +x /usr/local/bin/kubectl \
