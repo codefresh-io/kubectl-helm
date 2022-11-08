@@ -8,12 +8,12 @@ RUN echo "HELM_VERSION is set to: ${HELM_VERSION}"
 
 ENV FILENAME="helm-v${HELM_VERSION}-linux-amd64.tar.gz"
 
-# WHY is this required? 
+# WHY is this required? ca-certificates already installed, and update does nothing
 # RUN apt-get update && apt upgrade -y
 # RUN apt-get install ca-certificates -y
 # RUN update-ca-certificates
 
-RUN apt-get update -y && apt-get install curl jq make git openssl -y \
+RUN apt-get update -y && apt-get install curl make jq git openssl -y \
     && pip install yq \
     && curl -L https://storage.googleapis.com/kubernetes-release/release/${KUBE_VERSION}/bin/linux/amd64/kubectl -o /usr/local/bin/kubectl \
     && chmod +x /usr/local/bin/kubectl \
@@ -21,7 +21,7 @@ RUN apt-get update -y && apt-get install curl jq make git openssl -y \
     && tar -zxvf /tmp/${FILENAME} -C /tmp \
     && mv /tmp/linux-amd64/helm /bin/helm \
     # Cleanup uncessary files
-    && rm -f /var/cache/apk/* \
+    && rm -rf /var/lib/apt/lists/* \
     && rm -rf /tmp/*
 
 RUN bash -c 'if [[ "${HELM_VERSION}" == 2* ]]; then helm init --client-only; else echo "using helm3, no need to initialize helm"; fi'
