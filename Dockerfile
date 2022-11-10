@@ -15,11 +15,6 @@ RUN echo "HELM_VERSION is set to: ${HELM_VERSION}"
 
 ENV FILENAME="helm-v${HELM_VERSION}-linux-amd64.tar.gz"
 
-# WHY is this required? ca-certificates already installed, and update does nothing
-# RUN apt-get update && apt upgrade -y
-# RUN apt-get install ca-certificates -y
-# RUN update-ca-certificates
-
 RUN apt-get update -y && apt-get install curl make jq git openssl -y \
     && pip install yq \
     && curl -L https://storage.googleapis.com/kubernetes-release/release/${KUBE_VERSION}/bin/linux/amd64/kubectl -o /usr/local/bin/kubectl \
