@@ -1,4 +1,4 @@
-FROM debian:bookworm-20221114
+FROM ubuntu:jammy-20221101
 
 
 ARG KUBE_VERSION="v1.23.3"
@@ -25,7 +25,7 @@ RUN apt-get update -y && apt-get install ca-certificates -y && update-ca-certifi
     && tar -zxvf /tmp/${FILENAME} -C /tmp \
     && mv /tmp/linux-amd64/helm /bin/helm \
     # Cleanup uncessary files
-    && rm -rf /var/cache/apt/* \
+    && apt-get clean \
     && rm -rf /tmp/*
 
 RUN bash -c 'if [[ "${HELM_VERSION}" == 2* ]]; then helm init --client-only; else echo "using helm3, no need to initialize helm"; fi'
