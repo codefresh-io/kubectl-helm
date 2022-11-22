@@ -18,6 +18,7 @@ RUN apt-get update -y && apt-get install ca-certificates -y && update-ca-certifi
     && apt-get install git -y \
     && apt-get install openssl -y \
     && apt-get install python3-pip -y \
+    && apt-get install busybox -y && ln -s /bin/busybox /usr/bin/[[ \
     && pip install yq \
     && curl -L https://storage.googleapis.com/kubernetes-release/release/${KUBE_VERSION}/bin/linux/amd64/kubectl -o /usr/local/bin/kubectl \
     && chmod +x /usr/local/bin/kubectl \
