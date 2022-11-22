@@ -15,7 +15,7 @@ RUN apt-get update -y && apt-get install ca-certificates jq git openssl curl -y 
     && curl -L https://get.helm.sh/${FILENAME} -o /tmp/${FILENAME} \
     && tar -zxvf /tmp/${FILENAME} -C /tmp \
     && mv /tmp/linux-amd64/helm /bin/helm \
-    # Cleanup uncessary files
+    # Cleanup unnecessary files
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* \
     && rm -rf /tmp/*
