@@ -1,4 +1,4 @@
-FROM ubuntu:jammy-20221101
+FROM debian:bullseye-20221114-slim
 
 
 ARG KUBE_VERSION="v1.23.3"
