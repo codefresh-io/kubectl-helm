@@ -26,6 +26,7 @@ RUN apt-get update -y && apt-get install ca-certificates -y && update-ca-certifi
     && mv /tmp/linux-amd64/helm /bin/helm \
     # Cleanup uncessary files
     && apt-get clean \
+    && rm -rf /var/lib/apt/lists/* \
     && rm -rf /tmp/*
 
 RUN bash -c 'if [[ "${HELM_VERSION}" == 2* ]]; then helm init --client-only; else echo "using helm3, no need to initialize helm"; fi'
