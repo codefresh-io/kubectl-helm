@@ -37,7 +37,7 @@ steps:
   run-cli-loop:
     image: codefresh/cli
     commands:
-      - for VAR in $(cat helmVersionsList); do codefresh wait $(codefresh run ${{CF_PIPELINE_NAME}} -d --branch ${{CF_BRANCH}} --variable HELM_VERSION=${VAR} --trigger ${{CF_PIPELINE_TRIGGER_ID}} --context github-integration) & done
+      - for VAR in $(cat helmVersionsList); do codefresh wait $(codefresh run ${{CF_PIPELINE_NAME}} -d --branch ${{CF_BRANCH}} --variable HELM_VERSION=${VAR} --trigger ${{CF_PIPELINE_TRIGGER_ID}} --context github-integration && sleep 10) & done
       - for j in $(jobs -p); do wait $j || (echo "Failed to build one of the images" && ! break); done
     when:
       condition:
