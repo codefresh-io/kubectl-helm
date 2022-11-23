@@ -84,6 +84,23 @@ steps:
       push_to_quay_with_branch:
         registry: quay-codefresh
 
+  push_to_registry_with_dev_branch_tag:
+    title: Pushing image to registry
+    type: push
+    candidate: ${{BuildingDockerImage}}
+    tag: ${{CF_BRANCH}}
+    when:
+      condition:
+        all:
+          recursivelyInvoked: 'includes("${{HELM_VERSION}}", "${{") == false'
+          latestHelmVersion: "'${{HELM_VERSION}}' == '${{LATEST_VERSION}}'"
+          notMasterBranch: "'${{CF_BRANCH}}' != 'master'"
+    scale:
+      push_to_dockerhub_with_branch:
+        registry: dockerhub
+      push_to_quay_with_branch:
+        registry: quay-codefresh
+
   push_latest:
     type: push
     registry: dockerhub
