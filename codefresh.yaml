@@ -37,7 +37,7 @@ steps:
   run-cli-loop:
     image: codefresh/cli
     commands:
-      - for VAR in $(cat helmVersionsList); do codefresh wait $(codefresh run ${{CF_PIPELINE_NAME}} -d --branch ${{CF_BRANCH}} --variable HELM_VERSION=${VAR} --trigger ${{CF_PIPELINE_TRIGGER_ID}} --context github) & done
+      - for VAR in $(cat helmVersionsList); do codefresh wait $(codefresh run ${{CF_PIPELINE_NAME}} -d --branch ${{CF_BRANCH}} --variable HELM_VERSION=${VAR} --trigger ${{CF_PIPELINE_TRIGGER_ID}} --context github-integration && sleep 10) & done
       - for j in $(jobs -p); do wait $j || (echo "Failed to build one of the images" && ! break); done
     when:
       condition:
@@ -48,7 +48,7 @@ steps:
     type: git-clone
     arguments:
       repo: '${{CF_REPO_OWNER}}/${{CF_REPO_NAME}}'
-      git: github
+      git: github-integration
       revision: '${{CF_REVISION}}'
       when:
         condition:
@@ -82,6 +82,23 @@ steps:
       push_to_dockerhub_with_branch:
         registry: dockerhub
       push_to_quay_with_branch:
+        registry: quay-codefresh
+
+  push_to_registry_with_dev_branch_tag:
+    title: Pushing image to registry with dev branch tag
+    type: push
+    candidate: ${{BuildingDockerImage}}
+    tag: ${{CF_BRANCH}}
+    when:
+      condition:
+        all:
+          recursivelyInvoked: 'includes("${{HELM_VERSION}}", "${{") == false'
+          latestHelmVersion: "'${{HELM_VERSION}}' == '${{LATEST_VERSION}}'"
+          notMasterBranch: "'${{CF_BRANCH}}' != 'master'"
+    scale:
+      push_to_dockerhub_with_dev_branch:
+        registry: dockerhub
+      push_to_quay_with_dev_branch:
         registry: quay-codefresh
 
   push_latest:
