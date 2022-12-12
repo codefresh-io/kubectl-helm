@@ -33,7 +33,7 @@ steps:
       condition:
         all:
           notRecursivelyInvoked: 'includes("${{HELM_VERSION}}", "${{") == true'
-          
+
   run-cli-loop:
     image: codefresh/cli
     commands:
@@ -43,7 +43,7 @@ steps:
       condition:
         all:
           notRecursivelyInvoked: 'includes("${{HELM_VERSION}}", "${{") == true'
-          
+
   clone:
     type: git-clone
     arguments:
@@ -54,7 +54,7 @@ steps:
         condition:
           all:
             recursivelyInvoked: 'includes("${{HELM_VERSION}}", "${{") == false'
-  
+
   BuildingDockerImage:
     title: Building Docker Image
     type: build
@@ -67,12 +67,12 @@ steps:
       condition:
         all:
           recursivelyInvoked: 'includes("${{HELM_VERSION}}", "${{") == false'
-   
-  push_to_registry_with_branch:	
+
+  push_to_registry_with_branch:
     title: Pushing image to registry
     type: push
     candidate: ${{BuildingDockerImage}}
-    tag: ${{HELM_VERSION}}
+    tag: ${{HELM_VERSION}}-debian
     when:
       condition:
         all:
