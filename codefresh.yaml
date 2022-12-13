@@ -58,7 +58,7 @@ steps:
   BuildingDockerImage:
     title: Building Docker Image
     type: build
-    image_name: codefresh/kube-helm
+    image_name: codefresh/kube-helm-debian
     working_directory: '${{clone}}'
     tag: '${{HELM_VERSION}}'
     build_arguments:
@@ -72,12 +72,12 @@ steps:
     title: Pushing image to registry
     type: push
     candidate: ${{BuildingDockerImage}}
-    tag: ${{HELM_VERSION}}-debian
+    tag: ${{HELM_VERSION}}
     when:
       condition:
         all:
           recursivelyInvoked: 'includes("${{HELM_VERSION}}", "${{") == false'
-          masterBranch: 'match("${{CF_BRANCH}}", "^master", true) == true'
+          masterBranch: 'match("${{CF_BRANCH}}", "^debian", true) == true'
     scale:
       push_to_dockerhub_with_branch:
         registry: dockerhub
@@ -94,7 +94,7 @@ steps:
         all:
           recursivelyInvoked: 'includes("${{HELM_VERSION}}", "${{") == false'
           latestHelmVersion: "'${{HELM_VERSION}}' == '${{LATEST_VERSION}}'"
-          notMasterBranch: "'${{CF_BRANCH}}' != 'master'"
+          notMasterBranch: "'${{CF_BRANCH}}' != 'debian'"
     scale:
       push_to_dockerhub_with_dev_branch:
         registry: dockerhub
@@ -110,7 +110,7 @@ steps:
       condition:
         all:
           latestHelmVersion: "'${{HELM_VERSION}}' == '${{LATEST_VERSION}}'"
-          masterBranch: "'${{CF_BRANCH}}' == 'master'"
+          masterBranch: "'${{CF_BRANCH}}' == 'debian'"
     scale:
       push_to_dockerhub_latest:
         registry: dockerhub
