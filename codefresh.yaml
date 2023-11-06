@@ -2,7 +2,7 @@ version: '1.0'
 steps:
 
   define_the_versions_list:
-    image: alpine
+    image: debian
     commands:
       - |- 
         cat <<EOF > helmVersionsList 
