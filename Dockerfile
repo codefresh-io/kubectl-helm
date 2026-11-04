@@ -1,4 +1,4 @@
-FROM python:3.8.15-slim-bullseye
+FROM python:3.13-slim-trixie
 
 ARG KUBE_VERSION="v1.23.3"
 ARG HELM_VERSION="3.0.0"
