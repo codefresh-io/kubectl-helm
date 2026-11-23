@@ -1,0 +1,19 @@
+Dockerfile
+  s_cf85d17cddab96::t_1a2e297068d608 3,13
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "a1a7bc2bd74c2e1c3cc775d699d3e7cb529619e0",
+  "prompts": {},
+  "sessions": {
+    "s_cf85d17cddab96": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "5512245a-9635-49e6-ae9b-cf9ca2921c89",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Bohdan Pysarenko <bohdan.pisarenko@octopus.com>"
+    }
+  }
+}
