@@ -18,7 +18,7 @@ RUN apk add --update ca-certificates && update-ca-certificates \
     && apk add git \
     && apk add openssl \
     && apk add py3-pip \
-    && pip install yq \
+    && pip install --break-system-packages yq \
     && curl -L https://storage.googleapis.com/kubernetes-release/release/${KUBE_VERSION}/bin/linux/amd64/kubectl -o /usr/local/bin/kubectl \
     && chmod +x /usr/local/bin/kubectl \
     && curl -L https://get.helm.sh/${FILENAME} -o /tmp/${FILENAME} \
