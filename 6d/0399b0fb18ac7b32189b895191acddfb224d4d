@@ -1,0 +1,19 @@
+codefresh.yaml
+  s_cf85d17cddab96::t_bbdad20575af4f 59-64
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "6d0399b0fb18ac7b32189b895191acddfb224d4d",
+  "prompts": {},
+  "sessions": {
+    "s_cf85d17cddab96": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "5512245a-9635-49e6-ae9b-cf9ca2921c89",
+        "model": "unknown"
+      },
+      "human_author": "Bohdan Pysarenko <bohdan.pisarenko@octopus.com>"
+    }
+  }
+}
