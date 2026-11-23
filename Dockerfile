@@ -1,7 +1,7 @@
 FROM alpine:3.24
 
 
-ARG KUBE_VERSION="v1.23.3"
+ARG KUBE_VERSION="v1.37.2"
 
 ARG HELM_VERSION="3.0.0"
 
@@ -19,7 +19,7 @@ RUN apk add --update ca-certificates && update-ca-certificates \
     && apk add openssl \
     && apk add py3-pip \
     && pip install --break-system-packages yq \
-    && curl -L https://storage.googleapis.com/kubernetes-release/release/${KUBE_VERSION}/bin/linux/amd64/kubectl -o /usr/local/bin/kubectl \
+    && curl -L https://dl.k8s.io/release/${KUBE_VERSION}/bin/linux/amd64/kubectl -o /usr/local/bin/kubectl \
     && chmod +x /usr/local/bin/kubectl \
     && curl -L https://get.helm.sh/${FILENAME} -o /tmp/${FILENAME} \
     && tar -zxvf /tmp/${FILENAME} -C /tmp \
